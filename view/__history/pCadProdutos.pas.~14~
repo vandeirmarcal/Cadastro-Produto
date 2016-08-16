@@ -1,0 +1,168 @@
+{ ------------------------- INFORMAÇÕES GERAIS ---------------------------------
+  pCadProdutos (Tela responsável pelo cadastro de prodtos)
+  14/08/2016
+
+  Avisos:
+  Vandeir Roberto Marçal
+ ----------------------------------------------------------------------------- }
+unit pCadProdutos;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls,
+  Data.DB, Vcl.Grids, Vcl.DBGrids, dbclient, bSelect, bCriterioSql, bCadPrdutos;
+
+type
+  TFcadprodutos = class(TForm)
+    pnBotoesAcao: TPanel;
+    GBcadprodutos: TGroupBox;
+    Lcodigo: TLabel;
+    Lnome: TLabel;
+    Lunidade: TLabel;
+    GBlistaprodutos: TGroupBox;
+    dbgProduo: TDBGrid;
+    Loperacao: TLabel;
+    pnInformativo: TPanel;
+    stTitulo: TStaticText;
+    stDescricao: TStaticText;
+    dsProdutos: TDataSource;
+    edtCodigo: TEdit;
+    Enome: TEdit;
+    Eunidadde: TEdit;
+    Panel1: TPanel;
+    btnExcluir: TBitBtn;
+    btnConsultar: TBitBtn;
+    btnAlterar: TBitBtn;
+    btnIncluir: TBitBtn;
+    BitBtn1: TBitBtn;
+    CBconsulta: TComboBox;
+    Econsulta: TEdit;
+    procedure btnIncluirClick(Sender: TObject);
+    procedure btnAlterarClick(Sender: TObject);
+    procedure btnConsultarClick(Sender: TObject);
+    procedure btnExcluirClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure dbgProduoKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure dbgProduoCellClick(Column: TColumn);
+  private
+
+    { -- ESTRUTURA --
+     Objeto que representa a classe de negócios
+    }
+    bCadPrdutos : TCadProdutos;
+    codigo : string;
+    nome : string;
+    unidade : string;
+  public
+    { Public declarations }
+  end;
+
+var
+  Fcadprodutos: TFcadprodutos;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFcadprodutos.btnAlterarClick(Sender: TObject);
+begin
+
+  // Atualizo a tela
+  Loperacao.Caption := 'Alteração';
+
+  // Aaltero os dados no banco de dados
+  bCadPrdutos.updateProduto(Enome.Text, Eunidadde.Text, edtCodigo.Text);
+
+  // Recarrego o grid
+  btnConsultarClick(self);
+end;
+
+procedure TFcadprodutos.btnConsultarClick(Sender: TObject);
+begin
+
+  // Atualizo a tela
+  Loperacao.Caption := 'Consulta';
+
+  if (CBconsulta.ItemIndex = 0) then
+  begin
+    Econsulta.Clear;z
+  end;
+
+  case CBconsulta.ItemIndex of
+    0 :
+
+  end;
+
+  // Carrego o DataSource co tdos os produtos
+  dsProdutos.DataSet := bCadPrdutos.loadProdutos(CBconsulta.ItemIndex,Econsulta.Text,codigo, nome, unidade);
+
+  // Ligo o grid no dataSource
+  dbgProduo.DataSource := dsProdutos;
+
+  edtCodigo.Text := dbgProduo.DataSource.DataSet.FieldByName('CODIGO').AsString;
+  Enome.Text     := dbgProduo.DataSource.DataSet.FieldByName('NOME').AsString;
+  Eunidadde.Text := dbgProduo.DataSource.DataSet.FieldByName('UNIDADE').AsString
+end;
+
+procedure TFcadprodutos.btnExcluirClick(Sender: TObject);
+begin
+
+  // Atualizo a tela
+  Loperacao.Caption := 'Exclusão';
+
+  // Excluo o produto
+  bCadPrdutos.deleteProduto;
+
+  // Recarrego  tela
+  btnConsultarClick(self);
+end;
+
+procedure TFcadprodutos.btnIncluirClick(Sender: TObject);
+begin
+
+  // Atualizo a tela
+  Loperacao.Caption := 'Inclusão';
+
+  // Incluo o produto
+  bCadPrdutos.insereProduto(Enome.Text, Eunidadde.Text, edtCodigo.Text);
+
+  // Atualizo o grid
+  btnConsultarClick(self);
+end;
+
+procedure TFcadprodutos.dbgProduoCellClick(Column: TColumn);
+begin
+  edtCodigo.Text := dbgProduo.DataSource.DataSet.FieldByName('CODIGO').AsString;
+  Enome.Text     := dbgProduo.DataSource.DataSet.FieldByName('NOME').AsString;
+  Eunidadde.Text := dbgProduo.DataSource.DataSet.FieldByName('UNIDADE').AsString
+end;
+
+procedure TFcadprodutos.dbgProduoKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  edtCodigo.Text := dbgProduo.DataSource.DataSet.FieldByName('CODIGO').AsString;
+  Enome.Text     := dbgProduo.DataSource.DataSet.FieldByName('NOME').AsString;
+  Eunidadde.Text := dbgProduo.DataSource.DataSet.FieldByName('UNIDADE').AsString
+end;
+
+procedure TFcadprodutos.FormCreate(Sender: TObject);
+begin
+
+  // Crio objeto
+  bCadPrdutos := TCadProdutos.Create;
+
+  // Carrego o DataSource co tdos os produtos
+  dsProdutos.DataSet   := bCadPrdutos.loadProdutos(0,'', codigo, nome, unidade);
+
+  // Ligo o grid no dataSource
+  dbgProduo.DataSource := dsProdutos;
+
+  edtCodigo.Text := dbgProduo.DataSource.DataSet.FieldByName('CODIGO').AsString;
+  Enome.Text     := dbgProduo.DataSource.DataSet.FieldByName('NOME').AsString;
+  Eunidadde.Text := dbgProduo.DataSource.DataSet.FieldByName('UNIDADE').AsString
+end;
+
+end.

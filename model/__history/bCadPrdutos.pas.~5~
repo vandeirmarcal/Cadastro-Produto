@@ -1,0 +1,123 @@
+unit bCadPrdutos;
+
+interface
+
+uses dbclient, bSelect, bInsert, bUpdate;
+
+type
+  TCadProdutos = class
+  private
+
+    { -- ESTRUTURA --
+     CDS Produto
+    }
+    cdsProd : TClientDataSet;
+
+    { -- ESTRUTURA --
+     Objeto responsável por executar consultas no banco de dados
+    }
+    select : TSelect;
+
+    update : TUpdate;
+
+    insert : TInsert;
+  public
+
+    {
+      Construtor
+    }
+    constructor create;
+
+    {
+      Destroi objeto
+    }
+    destructor destroy;
+
+    {
+     Carrego os produtos
+
+       Parametros :
+         tipo - tipo do campo que será chave da cosulta
+           0 - Todos os produtos
+           1 - nome
+           2 - codigo
+
+       Retorna :
+         Cliente DataSet com os produtos consultados
+    }
+    function loadProdutos(tipo : integer; campo : string) : TClientDataSet;
+
+    function insereProduto(nome, unidade, codigo : String; precoCusto,
+                           precoVenda : double) : boolean;
+
+    function updateProduto(nome, unidade, codigo : String; precoCusto,
+                           precoVenda : double) : boolean;
+
+  end;
+
+implementation
+
+constructor TCadProdutos.create;
+begin
+
+  // Crio objeto
+  select := TSelect.Create;
+  update := TUpdate.Create;
+  insert := TInsert.Create;
+end;
+
+destructor TCadProdutos.destroy;
+begin
+
+  // Destruo objeto
+  select.Free;
+end;
+
+function TCadProdutos.loadProdutos(tipo : integer; campo : string) : TClientDataSet;
+begin
+
+  select.Clear;
+  select.addColuna('*');
+  select.addTable('PRODUTO', '');
+
+  case tipo of
+    1: select.addCriterio('NOME','%'+campo+'%','LIKE');
+    2: select.addCriterio('CODIGO', campo, '=');
+  end;
+  select.Execute(cdsProd);
+
+  Result := cdsProd;
+end;
+
+function TCadProdutos.insereProduto(nome, unidade, codigo : String; precoCusto,
+                                                 precoVenda : double) : boolean;
+begin
+
+
+  insert.Clear;
+
+  insert.addColuna('NOME', nome);
+  insert.addColuna('UNIDADE', unidade);
+  insert.addColuna('PRECO_CUSTO', precoCusto);
+  insert.addColuna('PRECO_VENDA', precoVenda);
+  insert.addColuna('CODIGO', codigo);
+  insert.addTable('PRODUTO', '');
+  insert.Execute;
+
+end;
+
+function TCadProdutos.updateProduto(nome, unidade, codigo : String; precoCusto,
+                                    precoVenda : double) : boolean;
+begin
+
+  update.Clear;
+  update.addColuna('NOME', nome);
+  update.addColuna('UNIDADE', unidade);
+  update.addColuna('PRECO_CUSTO', precoCusto);
+  update.addColuna('PRECO_VENDA', precoVenda);
+  update.addColuna('CODIGO', codigo);
+  update.addTable('PRODUTO', '');
+  update.Execute;
+end;
+
+end.

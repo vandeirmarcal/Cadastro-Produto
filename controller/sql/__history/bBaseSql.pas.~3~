@@ -1,0 +1,166 @@
+{ ------------------------- INFORMAÇÕES GERAIS ---------------------------------
+  bBaseSql (Classe base para SQL)
+  13/06/2016
+
+  Avisos:
+  Vandeir Roberto Marçal
+  AJI - Sistemas
+ ----------------------------------------------------------------------------- }
+unit bBaseSql;
+
+interface
+
+ uses DBClient, IBX.IBQuery, Classes, dialogs, IBX.IBDataBase,pDataModule;
+
+
+ type TBaseSQL = class (TPersistent)
+   private
+
+
+   protected
+     { --------------------------- ATRIBUTOS --------------------------------- }
+
+     { -- ESTRUTURA --
+     Contém todos os campos da consulta SQL
+     }
+     coluna : TStringList;
+
+     { -- ESTRUTURA --
+      Tabelas do sql
+     }
+     tabelas : TStringList;
+
+     { -- ESTRUTURA --
+     Owner
+     }
+     owner : TObject;
+
+     { -- ESTRUTURA --
+     SQL batch
+     }
+     lista_sql : TStringList;
+
+     { -- DADO --
+     Executa SQL ?
+     }
+     executa : boolean;
+
+
+     { ---------------------------- CONVERTE --------------------------------- }
+
+
+     {
+      Acessa todos os SQL Lazy armazenados (batch)
+
+      Parameters:
+          comunicação banco de dados
+
+      Return:
+          qtde total de registros processados
+     }
+     function buildTabelas : string;
+
+     function montaTabela(i : integer) : string;
+
+
+   public
+     { ------------------------ MANUTENÇÃO OBJETOS --------------------------- }
+
+
+     constructor Create; overload; virtual;
+
+     destructor Destroy  ;  override;
+
+     {
+      Constrói a consulta SQL ou parte dela
+
+      Return:
+          a consulta SQL
+     }
+     function buildSQL : string; virtual;
+
+     {                                                             .
+      Limpa as estruturas internas da classe preparando o objeto para ser
+      utilizado novamente, sem a necessidade de liberar e criar o objeto
+      novamente.
+     }
+     procedure Clear; virtual;
+
+
+ end;
+
+implementation
+
+uses Sysutils, DateUtils;
+
+// -------------------------------------------------------------------------- //
+// --------------------------- MANUTENÇÃO OBJETOS --------------------------- //
+// -------------------------------------------------------------------------- //
+
+
+Constructor TBaseSQL.Create;
+
+begin
+  inherited;
+
+  tabelas := TStringList.Create;
+
+  // Lista SQL
+  lista_sql := TStringList.Create;
+
+  // Nada
+  owner := nil;
+
+  // Sempre executa
+  executa := true;
+end;
+
+Destructor TBaseSQL.Destroy ;
+
+begin
+  lista_sql.Free;
+
+  inherited;
+end;
+
+procedure TBaseSQL.Clear;
+
+begin
+
+end;
+
+function TBaseSQL.buildSQL : string;
+
+begin
+
+  Result := '';
+end;
+
+
+function TBaseSQL.buildTabelas : string;
+
+var i : integer;
+    sql : string;
+
+begin
+
+  sql := tabelas.Strings[i];
+
+  // Retorno
+  Result := sql;
+end;
+
+function TBaseSQL.montaTabela(i : integer) : string;
+
+var sql : string;
+
+begin
+
+  sql := tabelas.Strings[i];
+
+  // Retorno
+  Result := sql;
+end;
+
+
+end.

@@ -1,0 +1,80 @@
+object FMenu: TFMenu
+  Left = 0
+  Top = 0
+  Caption = 'Software de Cadastro'
+  ClientHeight = 361
+  ClientWidth = 783
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  Menu = mmMenu
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object mmMenu: TMainMenu
+    Left = 112
+    Top = 168
+    object Matriz1: TMenuItem
+      Caption = 'Cadastros'
+      object Mprodutos: TMenuItem
+        Tag = 6
+        Caption = 'Produtos'
+        OnClick = MprodutosClick
+      end
+      object N4: TMenuItem
+        Caption = '-'
+      end
+    end
+    object Help1: TMenuItem
+      Caption = '&Ajuda '
+      Hint = 'Ajuda'
+      object mVersoes: TMenuItem
+        Caption = '&Vers'#245'es...'
+        Hint = 'Vers'#245'es do Sistema'
+      end
+      object N1: TMenuItem
+        Caption = '-'
+        Visible = False
+      end
+      object mSistema: TMenuItem
+        Caption = '&Sistema...'
+        Hint = 'Configura'#231#245'es da M'#225'quina'
+        Visible = False
+      end
+      object N5: TMenuItem
+        Caption = '-'
+        Visible = False
+      end
+      object EasyScript2: TMenuItem
+        Caption = 'Easy Script'
+        ShortCut = 49235
+        Visible = False
+      end
+      object Contador: TMenuItem
+        Caption = 'Contador'
+        ShortCut = 49219
+        Visible = False
+      end
+      object ConfiguraesRegionaisUsurioWindows1: TMenuItem
+        Caption = 'Configura'#231#245'es Regionais Usu'#225'rio Windows'
+        ShortCut = 49237
+        Visible = False
+      end
+      object mSobre: TMenuItem
+        Caption = 'Sobre...'
+      end
+      object ManutencaoRelatorios1: TMenuItem
+        Caption = 'Manutencao Relatorios'
+        ShortCut = 49234
+        Visible = False
+      end
+    end
+    object mSait: TMenuItem
+      Caption = 'Sai&r'
+      Hint = 'Sai do Sistema'
+    end
+  end
+end

@@ -1,0 +1,101 @@
+{ ------------------------- INFORMAÇÕES GERAIS ---------------------------------
+  bCriterioSql (Representa os critérios SQL)
+  Data início: 13/06/2016
+
+  Vandeir Roberto Marçal
+  AJI - Sistemas
+ ----------------------------------------------------------------------------- }
+unit bCriterioSql;
+
+interface
+
+USES bBaseSql;
+
+ type TCriterio = class (TBaseSql)
+   private
+
+
+
+   protected
+
+
+   public
+     { -----------------------  MANUTENÇÃO OBJETOS --------------------------- }
+
+     {
+      Cria um novo objeto da classe TSelect
+     }
+     constructor Create; override;
+
+
+     destructor Destroy  ;  override;
+
+     procedure Clear; override;
+
+     procedure addCriterio(campo, valor : string; operador: string);
+
+     function buildCriterio : string;
+
+     { -------------------------- GERAL -------------------------------------- }
+
+ end;
+
+implementation
+
+uses
+ sysutils;
+
+// -------------------------------------------------------------------------- //
+// ------------------------ MANUTENÇÃO OBJETOS ------------------------------ //
+// -------------------------------------------------------------------------- //
+
+Constructor TCriterio.Create;
+
+begin
+  inherited Create;
+end;
+
+Destructor TCriterio.Destroy;
+
+begin
+  inherited;
+end;
+
+procedure TCriterio.Clear;
+
+begin
+  inherited;
+end;
+
+procedure TCriterio.addCriterio(campo, valor : string; operador: string);
+
+var indice : integer;
+
+begin
+
+  // Pego o valor do indice do vetor
+  indice := Length(criterio);
+
+  // Adiciono uma posição na estrutura
+  SetLength(criterio,indice+1);
+
+  // Monto o critério
+  criterio[indice].nomeCampo  := campo;
+  criterio[indice].parametro  := 'p'+campo;
+  criterio[indice].valorCampo := valor;
+  criterio[indice].operador   := operador;
+end;
+
+function TCriterio.buildCriterio : string;
+
+var i : integer;
+
+begin
+
+  // Monto o critério
+  Result := criterio[0].nomeCampo+' '+criterio[0].operador+' '+':'+
+            criterio[0].parametro;
+end;
+
+end.
+

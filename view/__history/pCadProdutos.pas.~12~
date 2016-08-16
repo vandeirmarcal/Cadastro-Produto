@@ -1,0 +1,96 @@
+unit pCadProdutos;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls,
+  Data.DB, Vcl.Grids, Vcl.DBGrids, dbclient, bSelect, bCriterioSql, bCadPrdutos;
+
+type
+  TFcadprodutos = class(TForm)
+    pnBotoesAcao: TPanel;
+    btnIncluir: TBitBtn;
+    btnAlterar: TBitBtn;
+    btnConsultar: TBitBtn;
+    btnExcluir: TBitBtn;
+    btnProximaAba: TBitBtn;
+    btnAbaAnterior: TBitBtn;
+    GBcadprodutos: TGroupBox;
+    bSalvar: TBitBtn;
+    bCancelar: TBitBtn;
+    edtCodigo: TEdit;
+    Lcodigo: TLabel;
+    Enome: TEdit;
+    Lnome: TLabel;
+    Lunidade: TLabel;
+    Eunidadde: TEdit;
+    GBlistaprodutos: TGroupBox;
+    dbgProduo: TDBGrid;
+    Loperacao: TLabel;
+    pnInformativo: TPanel;
+    stTitulo: TStaticText;
+    stDescricao: TStaticText;
+    dsProdutos: TDataSource;
+    procedure btnIncluirClick(Sender: TObject);
+    procedure btnAlterarClick(Sender: TObject);
+    procedure btnConsultarClick(Sender: TObject);
+    procedure btnExcluirClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+
+    { -- ESTRUTURA --
+     Objeto que representa a classe de negócios
+    }
+    bCadPrdutos : TCadProdutos;
+  public
+    { Public declarations }
+  end;
+
+var
+  Fcadprodutos: TFcadprodutos;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFcadprodutos.btnAlterarClick(Sender: TObject);
+begin
+  Loperacao.Caption := 'Alteração';
+
+  bCadPrdutos.updateProduto(Enome.Text, Eunidadde.Text, edtCodigo.Text);
+
+end;
+
+procedure TFcadprodutos.btnConsultarClick(Sender: TObject);
+begin
+  Loperacao.Caption := 'Consulta';
+end;
+
+procedure TFcadprodutos.btnExcluirClick(Sender: TObject);
+begin
+  Loperacao.Caption := 'Exclusão';
+  bCadPrdutos.deleteProduto;
+end;
+
+procedure TFcadprodutos.btnIncluirClick(Sender: TObject);
+begin
+  Loperacao.Caption := 'Inclusão';
+
+  bCadPrdutos.insereProduto(Enome.Text, Eunidadde.Text, edtCodigo.Text);
+end;
+
+procedure TFcadprodutos.FormCreate(Sender: TObject);
+begin
+
+  // Crio objeto
+  bCadPrdutos := TCadProdutos.Create;
+
+  // Carrego o DataSource co tdos os produtos
+  dsProdutos.DataSet   := bCadPrdutos.loadProdutos(0,'');
+
+  // Ligo o grid no dataSource
+  dbgProduo.DataSource := dsProdutos;
+end;
+
+end.

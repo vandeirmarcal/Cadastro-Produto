@@ -1,0 +1,9 @@
+Projeto Cadastro de produtos
+
+Pasta BD - Pasta onde é guardado o banco de dados, Firebird 2.5
+
+Pasta Controller - Pasta onde guardamos os objetos responsáveis por executar comandos SQL, Conexão com o banco de dados
+
+Pasta Model - Pasta onde são guardadas as classes de negócio, responsáveis por executar procedimentos referentes as interfaces
+
+view - Pasta onde são guardadas as interfaces do programa

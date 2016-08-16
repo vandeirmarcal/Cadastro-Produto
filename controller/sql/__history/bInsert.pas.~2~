@@ -1,0 +1,122 @@
+{ ------------------------- INFORMAÇÕES GERAIS ---------------------------------
+  bSelect (Representa uma consulta SQL - SELECT)
+  Data início: 13/06/2016
+
+  Vandeir Roberto Marçal
+  AJI - Sistemas
+ ----------------------------------------------------------------------------- }
+unit bInsert;
+
+interface
+
+ uses DBClient, Classes, bCriterioSql,IBX.IBQuery,IBX.IBDataBase,pDataModule, bBaseSql;
+
+ type TInsert = class (TBaseSQL)
+   private
+     { --------------------------- ATRIBUTOS --------------------------------- }
+
+
+   protected
+
+   public
+     { -----------------------  MANUTENÇÃO OBJETOS --------------------------- }
+
+     {
+      Cria um novo objeto da classe TSelect
+     }
+     constructor Create; overload; override;
+
+
+     destructor Destroy  ;  override;
+
+     { -------------------------- GERAL -------------------------------------- }
+
+     {
+      Constrói uma consulta SQL
+
+      Return:
+          a consulta SQL
+     }
+     function buildSQL  : string;  override;
+ end;
+
+implementation
+
+uses
+ sysutils;
+
+// -------------------------------------------------------------------------- //
+// ------------------------ MANUTENÇÃO OBJETOS ------------------------------ //
+// -------------------------------------------------------------------------- //
+
+Constructor TInsert.Create;
+
+begin
+  inherited Create;
+
+  // Inicia;
+  Clear;
+end;
+
+Destructor TInsert.Destroy;
+
+begin
+  inherited;
+end;
+
+
+// -------------------------------------------------------------------------- //
+// --------------------------------- ADD ------------------------------------ //
+// -------------------------------------------------------------------------- //
+
+function TInsert.buildSQL : string;
+
+var i : integer;
+    sql : string;
+    order_u : string;
+
+begin
+
+  // Herda
+  Result := '';
+
+  // SELECT
+  sql := 'INSERT INTO (';
+
+  // CAMPOS
+  for i:=0 to Length(campo)-2 do
+  begin
+
+    sql := sql + campo[i].nomeCampo + ',';
+  end;
+
+  // Último campo
+  sql := sql + campo[i+1].nomeCampo+' VALUES (';
+
+  // CAMPOS
+  for i:=0 to Length(campo)-2 do
+  begin
+
+    sql := sql +'' campo[i].parametro + ',';
+  end;
+
+  // TABELAS
+  for i:=0 to tabelas.Count-2 do begin
+
+    sql := sql + montaTabela(i) + ',';
+  end;
+
+  // Último campo
+  sql := sql + montaTabela(tabelas.Count-1);
+
+  // Verifico se exist critério
+  if (Length(criterio) > 0) then
+  begin
+    sql := sql + ' WHERE ' + buildCriterio;
+  end;
+
+  // Guarda para próximo BUILD
+  Result := sql;
+end;
+
+end.

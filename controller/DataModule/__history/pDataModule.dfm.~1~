@@ -1,0 +1,33 @@
+object UdmParame: TUdmParame
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Left = 487
+  Top = 343
+  Height = 192
+  Width = 349
+  object trTrans: TIBTransaction
+    Active = False
+    DefaultDatabase = ciGtrans
+    Params.Strings = (
+      'read_committed'
+      'rec_version'
+      'wait')
+    AutoStopAction = saRollback
+    Left = 120
+    Top = 16
+  end
+  object ciGtrans: TIBDatabase
+    Params.Strings = (
+      'lc_ctype=ISO8859_1'
+      'user_name=SISTEMA'
+      'password=aji1990')
+    LoginPrompt = False
+    DefaultTransaction = trTrans
+    IdleTimer = 0
+    SQLDialect = 3
+    TraceFlags = []
+    AllowStreamedConnected = False
+    Left = 26
+    Top = 12
+  end
+end
